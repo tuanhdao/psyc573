@@ -1,1 +1,1 @@
-# psyc573
+# PSYC573 Bayesian Analysis 
