@@ -1,0 +1,2813 @@
+Mplus VERSION 8.11
+MUTHEN & MUTHEN
+11/28/2024  11:12 AM
+
+INPUT INSTRUCTIONS
+
+  TITLE:  RIPTIDE
+
+  DATA:
+    FILE IS "C:\Users\anhdao\OneDrive - Vanderbilt\Desktop\RIPTIDE Data\data_mech_mplus.csv"
+
+  VARIABLE:
+    NAMES ARE record group no  instance qol_td pro_phq cr1 cr2
+      cr3 ba1 ba2 ba3 ps acc mind sac def val ca dist supp avoid rum ss cc1 cc2	
+      cc3 rr1 rr2 pf1 pf2 pf3 er aveact actskill se affect1 affect2
+      affect3 affect4 affect5 affect6 affect7 affect8 affect9 affect10
+      na pa phq1 phq2 phq3 phq4 phq5 phq6 phq7 phq8 phq9;
+    USEVARIABLES ARE record rr1 time;
+    WITHIN = time;
+    MISSING IS .;
+    CLUSTER IS record;
+    LAGGED=rr1(1);
+    TINTERVAL = no(1);
+    DEFINE: time=no;
+
+
+
+  ANALYSIS:
+  TYPE = TWOLEVEL RANDOM;
+  ESTIMATOR = BAYES;
+  BITERATIONS = (20000);
+  PROCESSORS =2;
+  CONVERGENCE = 0.005;
+
+  MODEL:
+    %WITHIN%
+      BETA1  | rr1^ ON rr1^1;
+      trend1 | rr1 ON time;
+      LogV1 | rr1;
+
+
+     %BETWEEN%
+     [rr1];
+     [BETA1];
+     [LogV1];
+     [trend1];
+
+     rr1;
+     BETA1;
+     LogV1;
+     trend1;
+
+     OUTPUT: tech1 tech8 cinterval(hpd) standardized (cluster);
+     SAVEDATA:
+     SAVE = FSCORES(200);
+     file is rew573.dat;
+     BPARAMETER = rewbayes573.dat;
+     SAVE is cprob;
+     PLOT: TYPE = PLOT3 DRIFT (0, 5, 0.1);
+
+  
+
+
+
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+    FILE IS "C:\Users\anhdao\OneDrive - Vanderbilt\Desktop\RIPTIDE Data\data_mech_mplus.csv";
+*** WARNING in SAVEDATA command
+  Class probabilities can only be saved for TYPE=MIXTURE.
+*** WARNING
+  One or more individual-level variables have no variation within a
+  cluster for the following clusters.
+
+     Variable   Cluster IDs with no within-cluster variation
+
+      RR1         267 270 277
+      RR1^1       267 270 277
+
+*** WARNING
+  Data set contains cases with missing on all variables except x-variables.  Such cases
+  may lead to inaccurate TINTERVAL approximation.  It is recommended that such cases
+  are removed from the data before analysis.  Number of such cases:  194
+   4 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+RIPTIDE
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         816
+
+Number of dependent variables                                    1
+Number of independent variables                                  2
+Number of continuous latent variables                            3
+
+Observed dependent variables
+
+  Continuous
+   RR1
+
+Observed independent variables
+   TIME        RR1^1
+
+Continuous latent variables
+   BETA1       TREND1      LOGV1
+
+Variables with special functions
+
+  Cluster variable      RECORD
+
+  Within variables
+   TIME        RR1^1
+
+
+Estimator                                                    BAYES
+Specifications for Bayesian Estimation
+  Point estimate                                            MEDIAN
+  Number of Markov chain Monte Carlo (MCMC) chains               2
+  Random seed for the first chain                                0
+  Starting value information                           UNPERTURBED
+  Algorithm used for Markov chain Monte Carlo           GIBBS(PX1)
+  Convergence criterion                                  0.500D-01
+  Maximum number of iterations                               50000
+  K-th iteration used for thinning                               1
+Specifications for Bayes Factor Score Estimation
+  Number of imputed data sets                                  200
+  Iteration intervals for thinning                               1
+
+Input data file(s)
+  C:\Users\anhdao\OneDrive - Vanderbilt\Desktop\RIPTIDE Data\data_mech_mplus.csv
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of clusters                         34
+
+       Size (s)    Cluster ID with Size s
+
+         24        204 205 206 207 211 212 214 215 218 219 222 223 224
+                   226 229 232 233 239 240 241 244 245 246 248 249 252
+                   258 266 267 268 269 270 273 277
+
+
+
+SUMMARY OF MISSING DATA PATTERNS
+
+     Number of missing data patterns             4
+
+
+     MISSING DATA PATTERNS (x = not missing)
+
+           1  2  3  4
+ RR1       x     x
+ TIME      x  x  x  x
+ RR1^1     x        x
+
+
+     MISSING DATA PATTERN FREQUENCIES
+
+    Pattern   Frequency     Pattern   Frequency     Pattern   Frequency
+          1         515           3         107
+          2         112           4          82
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              RR1           TIME
+              ________      ________
+ RR1            0.762
+ TIME           0.762         1.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     RR1                   2.624       0.213       1.000   22.67%       1.000      2.000      3.000
+             622.000       1.495      -1.020       5.000    6.43%       3.000      4.000
+     TIME                 12.500       0.000       1.000    4.17%       5.000     10.000     12.500
+             816.000      47.917      -1.204      24.000    4.17%      15.000     20.000
+
+
+     WARNING: PROBLEMS OCCURRED IN SEVERAL ITERATIONS IN THE COMPUTATION OF THE STANDARDIZED ESTIMATES FOR SEVERAL
+     CLUSTERS. THIS IS MOST LIKELY DUE TO AR COEFFICIENTS GREATER THAN 1 OR PARAMETERS GIVING NON-STATIONARY MODELS.
+     SUCH POSTERIOR DRAWS ARE REMOVED. THE FOLLOWING CLUSTERS HAD SUCH PROBLEMS:
+          206 211 222 223 229 267 268 270 277
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     USE THE FBITERATIONS OPTION TO INCREASE THE NUMBER OF ITERATIONS BY A FACTOR
+     OF AT LEAST TWO TO CHECK CONVERGENCE AND THAT THE PSR VALUE DOES NOT INCREASE.
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                               8
+
+Information Criteria
+
+          Deviance (DIC)                         2054.307
+          Estimated Number of Parameters (pD)     245.170
+
+
+
+MODEL RESULTS
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+Between Level
+
+ Means
+    RR1                2.485       0.175      0.000       2.140       2.831      *
+    BETA1              0.229       0.065      0.000       0.096       0.351      *
+    TREND1             0.006       0.007      0.195      -0.008       0.021
+    LOGV1             -0.607       0.242      0.007      -1.076      -0.124      *
+
+ Variances
+    RR1                0.730       0.246      0.000       0.353       1.255      *
+    BETA1              0.027       0.032      0.000       0.000       0.099      *
+    TREND1             0.001       0.000      0.000       0.000       0.001      *
+    LOGV1              1.658       0.525      0.000       0.923       2.826      *
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ BETA1 | RR1^ ON
+    RR1^1              0.229       0.055      0.000       0.121       0.327      *
+
+ TREND1 | RR1 ON
+    TIME               0.057       0.121      0.213      -0.109       0.221
+
+ LOGV1 |
+    RR1                0.866       0.032      0.000       0.805       0.930      *
+
+Between Level
+
+ Means
+    RR1                2.905       0.492      0.000       2.022       3.946      *
+    BETA1              1.406       1.130      0.000       0.230       3.956      *
+    TREND1             0.286       0.400      0.195      -0.449       1.097
+    LOGV1             -0.472       0.193      0.007      -0.845      -0.091      *
+
+ Variances
+    RR1                1.000       0.000      0.000       1.000       1.000
+    BETA1              1.000       0.000      0.000       1.000       1.000
+    TREND1             1.000       0.000      0.000       1.000       1.000
+    LOGV1              1.000       0.000      0.000       1.000       1.000
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ BETA1 | RR1^ ON
+    RR1^1              0.472       0.130      0.002       0.218       0.691      *
+
+ TREND1 | RR1 ON
+    TIME               0.008       0.008      0.157      -0.007       0.023
+
+ LOGV1 |
+    RR1                0.866       0.032      0.000       0.805       0.930      *
+
+Between Level
+
+ Means
+    RR1                2.905       0.492      0.000       2.022       3.946      *
+    BETA1              1.406       1.130      0.000       0.230       3.956      *
+    TREND1             0.286       0.400      0.195      -0.449       1.097
+    LOGV1             -0.472       0.193      0.007      -0.845      -0.091      *
+
+ Variances
+    RR1                1.000       0.000      0.000       1.000       1.000
+    BETA1              1.000       0.000      0.000       1.000       1.000
+    TREND1             1.000       0.000      0.000       1.000       1.000
+    LOGV1              1.000       0.000      0.000       1.000       1.000
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ BETA1 | RR1^ ON
+    RR1^1              0.229       0.055      0.000       0.121       0.327      *
+
+ TREND1 | RR1 ON
+    TIME               0.007       0.007      0.161      -0.006       0.018
+
+ LOGV1 |
+    RR1                0.797       0.096      0.000       0.657       1.030      *
+
+Between Level
+
+ Means
+    RR1                2.485       0.175      0.000       2.140       2.831      *
+    BETA1              1.406       1.130      0.000       0.230       3.956      *
+    TREND1             0.286       0.400      0.195      -0.449       1.097
+    LOGV1             -0.472       0.193      0.007      -0.845      -0.091      *
+
+ Variances
+    RR1                0.730       0.246      0.000       0.353       1.255      *
+    BETA1              1.000       0.000      0.000       1.000       1.000
+    TREND1             1.000       0.000      0.000       1.000       1.000
+    LOGV1              1.000       0.000      0.000       1.000       1.000
+
+
+R-SQUARE
+
+Within-Level R-Square Averaged Across Clusters
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.134       0.032      0.000       0.070       0.195
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 204
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.171       0.156      0.133      -0.154       0.470
+
+ TREND1 | RR1 ON
+    TIME              -0.034       0.135      0.387      -0.327       0.206
+
+ LOGV1 |
+    RR1                0.947       0.063      0.000       0.812       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.153       0.130      0.133      -0.128       0.392
+
+ TREND1 | RR1 ON
+    TIME              -0.005       0.019      0.387      -0.047       0.030
+
+ LOGV1 |
+    RR1                0.947       0.063      0.000       0.812       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.171       0.156      0.133      -0.154       0.470
+
+ TREND1 | RR1 ON
+    TIME              -0.005       0.022      0.387      -0.053       0.036
+
+ LOGV1 |
+    RR1                1.178       0.428      0.000       0.606       2.073      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 204
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.053       0.063      0.000       0.000       0.188
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 205
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.184       0.168      0.126      -0.148       0.509
+
+ TREND1 | RR1 ON
+    TIME              -0.052       0.164      0.385      -0.387       0.246
+
+ LOGV1 |
+    RR1                0.939       0.084      0.000       0.744       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.215       0.191      0.126      -0.169       0.585
+
+ TREND1 | RR1 ON
+    TIME              -0.008       0.024      0.385      -0.056       0.035
+
+ LOGV1 |
+    RR1                0.939       0.084      0.000       0.744       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.184       0.168      0.126      -0.148       0.509
+
+ TREND1 | RR1 ON
+    TIME              -0.007       0.020      0.385      -0.047       0.031
+
+ LOGV1 |
+    RR1                0.666       0.306      0.000       0.301       1.310      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 205
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.061       0.084      0.000       0.000       0.256
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 206
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.344       0.186      0.007       0.014       0.741      *
+
+ TREND1 | RR1 ON
+    TIME               0.024       0.219      0.458      -0.402       0.432
+
+ LOGV1 |
+    RR1                0.867       0.150      0.000       0.514       0.999      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.714       0.298      0.007       0.104       1.227      *
+
+ TREND1 | RR1 ON
+    TIME               0.003       0.031      0.458      -0.057       0.062
+
+ LOGV1 |
+    RR1                0.867       0.150      0.000       0.514       0.999      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.344       0.186      0.007       0.014       0.741      *
+
+ TREND1 | RR1 ON
+    TIME               0.002       0.016      0.458      -0.029       0.033
+
+ LOGV1 |
+    RR1                0.206       0.068      0.000       0.103       0.339      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 206
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.133       0.150      0.000       0.001       0.486
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 207
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.206       0.181      0.123      -0.157       0.568
+
+ TREND1 | RR1 ON
+    TIME               0.110       0.173      0.255      -0.235       0.439
+
+ LOGV1 |
+    RR1                0.912       0.095      0.000       0.698       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.279       0.237      0.123      -0.189       0.723
+
+ TREND1 | RR1 ON
+    TIME               0.016       0.025      0.255      -0.029       0.068
+
+ LOGV1 |
+    RR1                0.912       0.095      0.000       0.698       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.206       0.181      0.123      -0.157       0.568
+
+ TREND1 | RR1 ON
+    TIME               0.012       0.019      0.255      -0.025       0.049
+
+ LOGV1 |
+    RR1                0.475       0.210      0.000       0.199       0.949      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 207
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.088       0.095      0.000       0.000       0.302
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 211
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.438       0.192      0.001       0.103       0.805      *
+
+ TREND1 | RR1 ON
+    TIME               0.317       0.223      0.076      -0.060       0.763
+
+ LOGV1 |
+    RR1                0.558       0.154      0.000       0.272       0.865      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.709       0.240      0.001       0.229       1.122      *
+
+ TREND1 | RR1 ON
+    TIME               0.045       0.032      0.076      -0.009       0.110
+
+ LOGV1 |
+    RR1                0.558       0.154      0.000       0.272       0.865      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.438       0.192      0.001       0.103       0.805      *
+
+ TREND1 | RR1 ON
+    TIME               0.033       0.023      0.076      -0.010       0.078
+
+ LOGV1 |
+    RR1                0.295       0.105      0.000       0.136       0.500      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 211
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.442       0.154      0.000       0.135       0.728
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 212
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.162       0.158      0.148      -0.168       0.458
+
+ TREND1 | RR1 ON
+    TIME               0.084       0.128      0.229      -0.152       0.350
+
+ LOGV1 |
+    RR1                0.946       0.064      0.000       0.818       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.140       0.132      0.148      -0.138       0.385
+
+ TREND1 | RR1 ON
+    TIME               0.012       0.018      0.229      -0.022       0.050
+
+ LOGV1 |
+    RR1                0.946       0.064      0.000       0.818       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.162       0.158      0.148      -0.168       0.458
+
+ TREND1 | RR1 ON
+    TIME               0.014       0.022      0.229      -0.027       0.057
+
+ LOGV1 |
+    RR1                1.225       0.429      0.000       0.587       2.173      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 212
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.054       0.064      0.000       0.000       0.182
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 214
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.213       0.144      0.067      -0.070       0.509
+
+ TREND1 | RR1 ON
+    TIME               0.057       0.118      0.312      -0.167       0.305
+
+ LOGV1 |
+    RR1                0.945       0.070      0.000       0.794       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.177       0.109      0.067      -0.057       0.374
+
+ TREND1 | RR1 ON
+    TIME               0.008       0.017      0.312      -0.023       0.046
+
+ LOGV1 |
+    RR1                0.945       0.070      0.000       0.794       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.213       0.144      0.067      -0.070       0.509
+
+ TREND1 | RR1 ON
+    TIME               0.010       0.021      0.312      -0.030       0.051
+
+ LOGV1 |
+    RR1                1.348       0.480      0.000       0.705       2.320      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 214
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.055       0.070      0.000       0.000       0.206
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 215
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.098       0.188      0.294      -0.295       0.452
+
+ TREND1 | RR1 ON
+    TIME               0.021       0.108      0.410      -0.197       0.226
+
+ LOGV1 |
+    RR1                0.966       0.055      0.000       0.839       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.072       0.137      0.294      -0.244       0.289
+
+ TREND1 | RR1 ON
+    TIME               0.003       0.016      0.410      -0.028       0.033
+
+ LOGV1 |
+    RR1                0.966       0.055      0.000       0.839       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.098       0.188      0.294      -0.295       0.452
+
+ TREND1 | RR1 ON
+    TIME               0.004       0.021      0.410      -0.037       0.045
+
+ LOGV1 |
+    RR1                1.694       0.665      0.000       0.876       3.171      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 215
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.034       0.055      0.000       0.000       0.161
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 218
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.220       0.154      0.065      -0.065       0.536
+
+ TREND1 | RR1 ON
+    TIME               0.108       0.178      0.266      -0.237       0.462
+
+ LOGV1 |
+    RR1                0.916       0.082      0.000       0.747       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.348       0.226      0.065      -0.081       0.790
+
+ TREND1 | RR1 ON
+    TIME               0.016       0.026      0.266      -0.034       0.066
+
+ LOGV1 |
+    RR1                0.916       0.082      0.000       0.747       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.220       0.154      0.065      -0.065       0.536
+
+ TREND1 | RR1 ON
+    TIME               0.010       0.017      0.266      -0.020       0.047
+
+ LOGV1 |
+    RR1                0.364       0.148      0.000       0.189       0.684      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 218
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.084       0.082      0.000       0.000       0.253
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 219
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.284       0.153      0.021       0.001       0.599      *
+
+ TREND1 | RR1 ON
+    TIME              -0.049       0.169      0.386      -0.396       0.269
+
+ LOGV1 |
+    RR1                0.898       0.099      0.000       0.687       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.384       0.178      0.021       0.035       0.727      *
+
+ TREND1 | RR1 ON
+    TIME              -0.007       0.024      0.386      -0.056       0.040
+
+ LOGV1 |
+    RR1                0.898       0.099      0.000       0.687       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.284       0.153      0.021       0.001       0.599      *
+
+ TREND1 | RR1 ON
+    TIME              -0.005       0.019      0.386      -0.041       0.034
+
+ LOGV1 |
+    RR1                0.493       0.174      0.000       0.247       0.848      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 219
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.102       0.099      0.000       0.000       0.313
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 222
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.322       0.207      0.040      -0.024       0.784
+
+ TREND1 | RR1 ON
+    TIME               0.106       0.177      0.254      -0.200       0.497
+
+ LOGV1 |
+    RR1                0.847       0.163      0.000       0.483       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.378       0.255      0.040      -0.039       0.946
+
+ TREND1 | RR1 ON
+    TIME               0.015       0.026      0.254      -0.029       0.072
+
+ LOGV1 |
+    RR1                0.847       0.163      0.000       0.483       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.322       0.207      0.040      -0.024       0.784
+
+ TREND1 | RR1 ON
+    TIME               0.014       0.022      0.254      -0.031       0.057
+
+ LOGV1 |
+    RR1                0.586       0.573      0.000       0.159       1.572      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 222
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.153       0.163      0.000       0.000       0.517
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 223
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.284       0.168      0.023       0.007       0.681      *
+
+ TREND1 | RR1 ON
+    TIME               0.371       0.199      0.040      -0.009       0.740
+
+ LOGV1 |
+    RR1                0.696       0.143      0.000       0.433       0.963      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.493       0.236      0.023       0.020       0.926      *
+
+ TREND1 | RR1 ON
+    TIME               0.053       0.029      0.040      -0.001       0.107
+
+ LOGV1 |
+    RR1                0.696       0.143      0.000       0.433       0.963      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.284       0.168      0.023       0.007       0.681      *
+
+ TREND1 | RR1 ON
+    TIME               0.035       0.020      0.040      -0.005       0.074
+
+ LOGV1 |
+    RR1                0.306       0.106      0.000       0.156       0.542      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 223
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.304       0.143      0.000       0.037       0.567
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 224
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.194       0.156      0.102      -0.116       0.507
+
+ TREND1 | RR1 ON
+    TIME               0.126       0.149      0.192      -0.176       0.400
+
+ LOGV1 |
+    RR1                0.928       0.071      0.000       0.779       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.227       0.171      0.102      -0.135       0.537
+
+ TREND1 | RR1 ON
+    TIME               0.018       0.021      0.192      -0.024       0.058
+
+ LOGV1 |
+    RR1                0.928       0.071      0.000       0.779       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.194       0.156      0.102      -0.116       0.507
+
+ TREND1 | RR1 ON
+    TIME               0.016       0.019      0.192      -0.018       0.057
+
+ LOGV1 |
+    RR1                0.706       0.238      0.000       0.316       1.191      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 224
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.072       0.071      0.000       0.000       0.221
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 226
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.230       0.209      0.108      -0.170       0.687
+
+ TREND1 | RR1 ON
+    TIME               0.025       0.222      0.442      -0.512       0.461
+
+ LOGV1 |
+    RR1                0.896       0.139      0.000       0.555       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.234       0.257      0.108      -0.197       0.828
+
+ TREND1 | RR1 ON
+    TIME               0.004       0.032      0.442      -0.076       0.064
+
+ LOGV1 |
+    RR1                0.896       0.139      0.000       0.555       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.230       0.209      0.108      -0.170       0.687
+
+ TREND1 | RR1 ON
+    TIME               0.004       0.026      0.442      -0.049       0.052
+
+ LOGV1 |
+    RR1                0.790       1.270      0.000       0.061       3.577      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 226
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.104       0.139      0.000       0.000       0.445
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 229
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.295       0.172      0.015       0.001       0.645      *
+
+ TREND1 | RR1 ON
+    TIME               0.161       0.199      0.197      -0.211       0.563
+
+ LOGV1 |
+    RR1                0.861       0.128      0.000       0.626       0.999      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.601       0.287      0.015       0.054       1.159      *
+
+ TREND1 | RR1 ON
+    TIME               0.023       0.028      0.197      -0.032       0.077
+
+ LOGV1 |
+    RR1                0.861       0.128      0.000       0.626       0.999      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.295       0.172      0.015       0.001       0.645      *
+
+ TREND1 | RR1 ON
+    TIME               0.012       0.015      0.197      -0.015       0.044
+
+ LOGV1 |
+    RR1                0.211       0.080      0.000       0.113       0.374      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 229
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.139       0.128      0.000       0.001       0.374
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 232
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.180       0.150      0.111      -0.114       0.467
+
+ TREND1 | RR1 ON
+    TIME               0.011       0.134      0.467      -0.271       0.252
+
+ LOGV1 |
+    RR1                0.949       0.058      0.000       0.827       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.188       0.146      0.111      -0.112       0.454
+
+ TREND1 | RR1 ON
+    TIME               0.002       0.019      0.467      -0.037       0.038
+
+ LOGV1 |
+    RR1                0.949       0.058      0.000       0.827       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.180       0.150      0.111      -0.114       0.467
+
+ TREND1 | RR1 ON
+    TIME               0.002       0.019      0.467      -0.034       0.042
+
+ LOGV1 |
+    RR1                0.870       0.291      0.000       0.449       1.500      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 232
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.051       0.058      0.000       0.000       0.173
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 233
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.225       0.156      0.064      -0.069       0.538
+
+ TREND1 | RR1 ON
+    TIME              -0.086       0.155      0.287      -0.376       0.247
+
+ LOGV1 |
+    RR1                0.915       0.083      0.000       0.739       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.262       0.168      0.064      -0.054       0.581
+
+ TREND1 | RR1 ON
+    TIME              -0.012       0.022      0.287      -0.053       0.036
+
+ LOGV1 |
+    RR1                0.915       0.083      0.000       0.739       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.225       0.156      0.064      -0.069       0.538
+
+ TREND1 | RR1 ON
+    TIME              -0.011       0.020      0.287      -0.051       0.028
+
+ LOGV1 |
+    RR1                0.686       0.222      0.000       0.345       1.093      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 233
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.085       0.083      0.000       0.000       0.261
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 239
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.241       0.162      0.064      -0.066       0.574
+
+ TREND1 | RR1 ON
+    TIME               0.065       0.150      0.319      -0.229       0.356
+
+ LOGV1 |
+    RR1                0.920       0.088      0.000       0.721       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.270       0.167      0.064      -0.069       0.579
+
+ TREND1 | RR1 ON
+    TIME               0.009       0.022      0.319      -0.032       0.052
+
+ LOGV1 |
+    RR1                0.920       0.088      0.000       0.721       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.241       0.162      0.064      -0.066       0.574
+
+ TREND1 | RR1 ON
+    TIME               0.009       0.020      0.319      -0.030       0.048
+
+ LOGV1 |
+    RR1                0.727       0.241      0.000       0.405       1.225      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 239
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.080       0.088      0.000       0.000       0.279
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 240
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.108       0.159      0.253      -0.222       0.413
+
+ TREND1 | RR1 ON
+    TIME               0.005       0.111      0.479      -0.205       0.231
+
+ LOGV1 |
+    RR1                0.970       0.046      0.000       0.867       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.088       0.122      0.253      -0.180       0.291
+
+ TREND1 | RR1 ON
+    TIME               0.001       0.016      0.479      -0.029       0.034
+
+ LOGV1 |
+    RR1                0.970       0.046      0.000       0.867       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.108       0.159      0.253      -0.222       0.413
+
+ TREND1 | RR1 ON
+    TIME               0.001       0.020      0.479      -0.039       0.041
+
+ LOGV1 |
+    RR1                1.497       0.485      0.000       0.773       2.496      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 240
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.030       0.046      0.000       0.000       0.133
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 241
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.237       0.163      0.058      -0.070       0.581
+
+ TREND1 | RR1 ON
+    TIME               0.062       0.156      0.347      -0.222       0.385
+
+ LOGV1 |
+    RR1                0.917       0.095      0.000       0.724       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.295       0.183      0.058      -0.047       0.655
+
+ TREND1 | RR1 ON
+    TIME               0.009       0.022      0.347      -0.031       0.056
+
+ LOGV1 |
+    RR1                0.917       0.095      0.000       0.724       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.237       0.163      0.058      -0.070       0.581
+
+ TREND1 | RR1 ON
+    TIME               0.007       0.019      0.347      -0.031       0.042
+
+ LOGV1 |
+    RR1                0.580       0.238      0.000       0.280       1.159      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 241
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.083       0.095      0.000       0.000       0.276
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 244
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.164       0.151      0.146      -0.164       0.436
+
+ TREND1 | RR1 ON
+    TIME               0.028       0.137      0.412      -0.263       0.292
+
+ LOGV1 |
+    RR1                0.956       0.052      0.000       0.845       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.176       0.151      0.146      -0.155       0.437
+
+ TREND1 | RR1 ON
+    TIME               0.004       0.020      0.412      -0.039       0.040
+
+ LOGV1 |
+    RR1                0.956       0.052      0.000       0.845       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.164       0.151      0.146      -0.164       0.436
+
+ TREND1 | RR1 ON
+    TIME               0.004       0.019      0.412      -0.035       0.041
+
+ LOGV1 |
+    RR1                0.855       0.274      0.000       0.470       1.483      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 244
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.044       0.052      0.000       0.000       0.155
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 245
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.149       0.194      0.216      -0.277       0.526
+
+ TREND1 | RR1 ON
+    TIME               0.342       0.187      0.031      -0.010       0.678
+
+ LOGV1 |
+    RR1                0.793       0.128      0.000       0.549       0.999      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.181       0.233      0.216      -0.315       0.601
+
+ TREND1 | RR1 ON
+    TIME               0.048       0.027      0.031       0.001       0.100      *
+
+ LOGV1 |
+    RR1                0.793       0.128      0.000       0.549       0.999      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.149       0.194      0.216      -0.277       0.526
+
+ TREND1 | RR1 ON
+    TIME               0.043       0.024      0.031      -0.003       0.089
+
+ LOGV1 |
+    RR1                0.624       0.253      0.000       0.296       1.215      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 245
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.207       0.128      0.000       0.001       0.451
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 246
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.293       0.160      0.023      -0.013       0.621
+
+ TREND1 | RR1 ON
+    TIME               0.082       0.145      0.259      -0.209       0.358
+
+ LOGV1 |
+    RR1                0.895       0.107      0.000       0.660       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.313       0.151      0.023       0.010       0.589      *
+
+ TREND1 | RR1 ON
+    TIME               0.012       0.021      0.259      -0.030       0.051
+
+ LOGV1 |
+    RR1                0.895       0.107      0.000       0.660       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.293       0.160      0.023      -0.013       0.621
+
+ TREND1 | RR1 ON
+    TIME               0.012       0.020      0.259      -0.030       0.050
+
+ LOGV1 |
+    RR1                0.772       0.277      0.000       0.383       1.384      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 246
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.105       0.107      0.000       0.000       0.340
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 248
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.183       0.153      0.111      -0.124       0.477
+
+ TREND1 | RR1 ON
+    TIME              -0.071       0.142      0.308      -0.346       0.209
+
+ LOGV1 |
+    RR1                0.937       0.068      0.000       0.786       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.181       0.139      0.111      -0.106       0.447
+
+ TREND1 | RR1 ON
+    TIME              -0.010       0.020      0.308      -0.050       0.030
+
+ LOGV1 |
+    RR1                0.937       0.068      0.000       0.786       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.183       0.153      0.111      -0.124       0.477
+
+ TREND1 | RR1 ON
+    TIME              -0.011       0.021      0.308      -0.051       0.033
+
+ LOGV1 |
+    RR1                0.983       0.320      0.000       0.503       1.585      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 248
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.063       0.068      0.000       0.000       0.214
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 249
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.280       0.199      0.058      -0.083       0.708
+
+ TREND1 | RR1 ON
+    TIME              -0.058       0.214      0.377      -0.552       0.274
+
+ LOGV1 |
+    RR1                0.864       0.144      0.000       0.534       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.357       0.253      0.058      -0.054       0.916
+
+ TREND1 | RR1 ON
+    TIME              -0.008       0.031      0.377      -0.079       0.039
+
+ LOGV1 |
+    RR1                0.864       0.144      0.000       0.534       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.280       0.199      0.058      -0.083       0.708
+
+ TREND1 | RR1 ON
+    TIME              -0.007       0.024      0.377      -0.058       0.035
+
+ LOGV1 |
+    RR1                0.546       0.687      0.000       0.120       1.513      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 249
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.136       0.144      0.000       0.000       0.466
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 252
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.172       0.160      0.145      -0.141       0.499
+
+ TREND1 | RR1 ON
+    TIME               0.015       0.167      0.458      -0.333       0.320
+
+ LOGV1 |
+    RR1                0.946       0.062      0.000       0.804       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.238       0.215      0.145      -0.208       0.644
+
+ TREND1 | RR1 ON
+    TIME               0.002       0.024      0.458      -0.048       0.046
+
+ LOGV1 |
+    RR1                0.946       0.062      0.000       0.804       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.172       0.160      0.145      -0.141       0.499
+
+ TREND1 | RR1 ON
+    TIME               0.002       0.018      0.458      -0.035       0.033
+
+ LOGV1 |
+    RR1                0.473       0.177      0.000       0.244       0.838      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 252
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.054       0.062      0.000       0.000       0.196
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 258
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.217       0.160      0.089      -0.099       0.526
+
+ TREND1 | RR1 ON
+    TIME              -0.028       0.157      0.428      -0.325       0.275
+
+ LOGV1 |
+    RR1                0.929       0.075      0.000       0.769       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.271       0.187      0.089      -0.113       0.609
+
+ TREND1 | RR1 ON
+    TIME              -0.004       0.023      0.428      -0.049       0.038
+
+ LOGV1 |
+    RR1                0.929       0.075      0.000       0.769       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.217       0.160      0.089      -0.099       0.526
+
+ TREND1 | RR1 ON
+    TIME              -0.003       0.019      0.428      -0.040       0.033
+
+ LOGV1 |
+    RR1                0.593       0.236      0.000       0.274       1.087      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 258
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.071       0.075      0.000       0.000       0.231
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 266
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.175       0.189      0.171      -0.264       0.497
+
+ TREND1 | RR1 ON
+    TIME               0.036       0.111      0.372      -0.188       0.246
+
+ LOGV1 |
+    RR1                0.949       0.074      0.000       0.790       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.134       0.141      0.171      -0.171       0.378
+
+ TREND1 | RR1 ON
+    TIME               0.005       0.016      0.372      -0.027       0.036
+
+ LOGV1 |
+    RR1                0.949       0.074      0.000       0.790       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.175       0.189      0.171      -0.264       0.497
+
+ TREND1 | RR1 ON
+    TIME               0.006       0.021      0.372      -0.036       0.047
+
+ LOGV1 |
+    RR1                1.554       0.707      0.000       0.729       2.933      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 266
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.051       0.074      0.000       0.000       0.210
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 267
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.318       0.273      0.041       0.023       1.000      *
+
+ TREND1 | RR1 ON
+    TIME              -0.722       3.681      0.472      -4.454       4.359
+
+ LOGV1 |
+    RR1                0.654       0.130      0.000       0.509       0.999      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              6.010       3.360      0.041       0.386      11.180      *
+
+ TREND1 | RR1 ON
+    TIME              -0.002       0.040      0.472      -0.095       0.074
+
+ LOGV1 |
+    RR1                0.654       0.130      0.000       0.509       0.999      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.318       0.273      0.041       0.023       1.000      *
+
+ TREND1 | RR1 ON
+    TIME               0.000       0.002      0.472      -0.005       0.004
+
+ LOGV1 |
+    RR1                0.002       0.000      0.000       0.002       0.002      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 267
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.346       0.130      0.000       0.001       0.491
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 268
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.296       0.205      0.058      -0.121       0.713
+
+ TREND1 | RR1 ON
+    TIME              -0.015       0.178      0.465      -0.368       0.328
+
+ LOGV1 |
+    RR1                0.883       0.132      0.000       0.576       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.406       0.272      0.058      -0.087       0.979
+
+ TREND1 | RR1 ON
+    TIME              -0.002       0.026      0.465      -0.053       0.047
+
+ LOGV1 |
+    RR1                0.883       0.132      0.000       0.576       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.296       0.205      0.058      -0.121       0.713
+
+ TREND1 | RR1 ON
+    TIME              -0.002       0.019      0.465      -0.041       0.034
+
+ LOGV1 |
+    RR1                0.444       0.196      0.000       0.196       0.875      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 268
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.117       0.132      0.000       0.000       0.424
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 269
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.215       0.197      0.112      -0.164       0.641
+
+ TREND1 | RR1 ON
+    TIME              -0.010       0.137      0.472      -0.287       0.255
+
+ LOGV1 |
+    RR1                0.931       0.104      0.000       0.692       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.193       0.166      0.112      -0.126       0.547
+
+ TREND1 | RR1 ON
+    TIME              -0.001       0.020      0.472      -0.041       0.037
+
+ LOGV1 |
+    RR1                0.931       0.104      0.000       0.692       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.215       0.197      0.112      -0.164       0.641
+
+ TREND1 | RR1 ON
+    TIME              -0.002       0.022      0.472      -0.043       0.045
+
+ LOGV1 |
+    RR1                1.156       0.521      0.000       0.519       2.385      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 269
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.069       0.104      0.000       0.000       0.308
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 270
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.221       0.216      0.120      -0.234       0.693
+
+ TREND1 | RR1 ON
+    TIME               0.091       0.330      0.350      -0.424       0.858
+
+ LOGV1 |
+    RR1                0.865       0.200      0.000       0.334       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.352       0.674      0.120      -0.698       1.875
+
+ TREND1 | RR1 ON
+    TIME               0.013       0.047      0.350      -0.056       0.127
+
+ LOGV1 |
+    RR1                0.865       0.200      0.000       0.334       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.221       0.216      0.120      -0.234       0.693
+
+ TREND1 | RR1 ON
+    TIME               0.009       0.029      0.350      -0.042       0.076
+
+ LOGV1 |
+    RR1                0.308       1.191      0.000       0.008       2.559      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 270
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.135       0.200      0.000       0.000       0.666
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 273
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.160       0.169      0.175      -0.200       0.475
+
+ TREND1 | RR1 ON
+    TIME               0.127       0.139      0.147      -0.114       0.430
+
+ LOGV1 |
+    RR1                0.929       0.075      0.000       0.758       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.151       0.152      0.175      -0.180       0.410
+
+ TREND1 | RR1 ON
+    TIME               0.018       0.020      0.147      -0.019       0.060
+
+ LOGV1 |
+    RR1                0.929       0.075      0.000       0.758       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.160       0.169      0.175      -0.200       0.475
+
+ TREND1 | RR1 ON
+    TIME               0.020       0.022      0.147      -0.018       0.069
+
+ LOGV1 |
+    RR1                1.076       0.455      0.000       0.538       2.148      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 273
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.071       0.075      0.000       0.000       0.242
+
+
+WITHIN-LEVEL STANDARDIZED MODEL RESULTS FOR CLUSTER 277
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.242       0.220      0.102      -0.211       0.703
+
+ TREND1 | RR1 ON
+    TIME               0.000       0.381      0.500      -0.855       0.767
+
+ LOGV1 |
+    RR1                0.841       0.231      0.000       0.190       1.000      *
+
+
+STDY Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.502       0.956      0.102      -0.804       2.404
+
+ TREND1 | RR1 ON
+    TIME               0.000       0.053      0.500      -0.130       0.103
+
+ LOGV1 |
+    RR1                0.841       0.231      0.000       0.190       1.000      *
+
+
+STD Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+ BETA1 | RR1^ ON
+    RR1^1              0.242       0.220      0.102      -0.211       0.703
+
+ TREND1 | RR1 ON
+    TIME               0.000       0.023      0.500      -0.047       0.045
+
+ LOGV1 |
+    RR1                0.203       1.421      0.000       0.002       3.330      *
+
+
+WITHIN-LEVEL R-SQUARE FOR CLUSTER 277
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RR1                0.159       0.231      0.000       0.000       0.810
+
+
+CREDIBILITY INTERVALS OF MODEL RESULTS
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+Between Level
+
+ Means
+    RR1              2.014       2.140       2.206       2.485       2.779       2.831       2.939
+    BETA1            0.062       0.096       0.126       0.229       0.340       0.351       0.408
+    TREND1          -0.014      -0.008      -0.006       0.006       0.019       0.021       0.026
+    LOGV1           -1.286      -1.076      -0.980      -0.607      -0.191      -0.124       0.016
+
+ Variances
+    RR1              0.310       0.353       0.398       0.730       1.135       1.255       1.590
+    BETA1            0.000       0.000       0.001       0.027       0.080       0.099       0.144
+    TREND1           0.000       0.000       0.000       0.001       0.001       0.001       0.002
+    LOGV1            0.775       0.923       0.943       1.658       2.481       2.826       3.486
+
+
+CREDIBILITY INTERVALS OF STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+Between Level
+
+ Means
+    RR1              1.712       2.022       2.115       2.905       3.706       3.946       4.286
+    BETA1            0.066       0.230       0.320       1.406       3.135       3.956       6.405
+    TREND1          -0.675      -0.449      -0.321       0.286       0.906       1.097       1.679
+    LOGV1           -0.980      -0.845      -0.787      -0.472      -0.151      -0.091       0.021
+
+ Variances
+    RR1              1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    BETA1            1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    TREND1           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    LOGV1            1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+
+STDY Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+Between Level
+
+ Means
+    RR1              1.712       2.022       2.115       2.905       3.706       3.946       4.286
+    BETA1            0.066       0.230       0.320       1.406       3.135       3.956       6.405
+    TREND1          -0.675      -0.449      -0.321       0.286       0.906       1.097       1.679
+    LOGV1           -0.980      -0.845      -0.787      -0.472      -0.151      -0.091       0.021
+
+ Variances
+    RR1              1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    BETA1            1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    TREND1           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    LOGV1            1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+
+STD Standardization
+
+                  Lower .5%  Lower 2.5%    Lower 5%    Estimate    Upper 5%  Upper 2.5%   Upper .5%
+
+Within Level
+
+Between Level
+
+ Means
+    RR1              2.014       2.140       2.206       2.485       2.779       2.831       2.939
+    BETA1            0.066       0.230       0.320       1.406       3.135       3.956       6.405
+    TREND1          -0.675      -0.449      -0.321       0.286       0.906       1.097       1.679
+    LOGV1           -0.980      -0.845      -0.787      -0.472      -0.151      -0.091       0.021
+
+ Variances
+    RR1              0.310       0.353       0.398       0.730       1.135       1.255       1.590
+    BETA1            1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    TREND1           1.000       1.000       1.000       1.000       1.000       1.000       1.000
+    LOGV1            1.000       1.000       1.000       1.000       1.000       1.000       1.000
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              RR1           TIME          RR1^1
+              ________      ________      ________
+                    0             0             0
+
+
+           LAMBDA
+              RR1           TIME          RR1^1
+              ________      ________      ________
+ RR1                0             0             0
+ TIME               0             0             0
+ RR1^1              0             0             0
+
+
+           THETA
+              RR1           TIME          RR1^1
+              ________      ________      ________
+ RR1                0
+ TIME               0             0
+ RR1^1              0             0             0
+
+
+           ALPHA
+              RR1           TIME          RR1^1
+              ________      ________      ________
+                    0             0             0
+
+
+           BETA
+              RR1           TIME          RR1^1
+              ________      ________      ________
+ RR1                0             0             0
+ TIME               0             0             0
+ RR1^1              0             0             0
+
+
+           PSI
+              RR1           TIME          RR1^1
+              ________      ________      ________
+ RR1                0
+ TIME               0             0
+ RR1^1              0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              RR1
+              ________
+                    0
+
+
+           LAMBDA
+              BETA1         TREND1        LOGV1         RR1
+              ________      ________      ________      ________
+ RR1                0             0             0             0
+
+
+           THETA
+              RR1
+              ________
+ RR1                0
+
+
+           ALPHA
+              BETA1         TREND1        LOGV1         RR1
+              ________      ________      ________      ________
+                    1             2             3             4
+
+
+           BETA
+              BETA1         TREND1        LOGV1         RR1
+              ________      ________      ________      ________
+ BETA1              0             0             0             0
+ TREND1             0             0             0             0
+ LOGV1              0             0             0             0
+ RR1                0             0             0             0
+
+
+           PSI
+              BETA1         TREND1        LOGV1         RR1
+              ________      ________      ________      ________
+ BETA1              5
+ TREND1             0             6
+ LOGV1              0             0             7
+ RR1                0             0             0             8
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              RR1           TIME          RR1^1
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           LAMBDA
+              RR1           TIME          RR1^1
+              ________      ________      ________
+ RR1            1.000         0.000         0.000
+ TIME           0.000         1.000         0.000
+ RR1^1          0.000         0.000         1.000
+
+
+           THETA
+              RR1           TIME          RR1^1
+              ________      ________      ________
+ RR1            0.000
+ TIME           0.000         0.000
+ RR1^1          0.000         0.000         0.000
+
+
+           ALPHA
+              RR1           TIME          RR1^1
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           BETA
+              RR1           TIME          RR1^1
+              ________      ________      ________
+ RR1            0.000         0.000         0.000
+ TIME           0.000         0.000         0.000
+ RR1^1          0.000         0.000         0.000
+
+
+           PSI
+              RR1           TIME          RR1^1
+              ________      ________      ________
+ RR1            0.000
+ TIME           0.000        23.958
+ RR1^1          0.000         0.000         0.750
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              RR1
+              ________
+                0.000
+
+
+           LAMBDA
+              BETA1         TREND1        LOGV1         RR1
+              ________      ________      ________      ________
+ RR1            0.000         0.000         0.000         1.000
+
+
+           THETA
+              RR1
+              ________
+ RR1            0.000
+
+
+           ALPHA
+              BETA1         TREND1        LOGV1         RR1
+              ________      ________      ________      ________
+                0.000         0.000         0.000         2.624
+
+
+           BETA
+              BETA1         TREND1        LOGV1         RR1
+              ________      ________      ________      ________
+ BETA1          0.000         0.000         0.000         0.000
+ TREND1         0.000         0.000         0.000         0.000
+ LOGV1          0.000         0.000         0.000         0.000
+ RR1            0.000         0.000         0.000         0.000
+
+
+           PSI
+              BETA1         TREND1        LOGV1         RR1
+              ________      ________      ________      ________
+ BETA1          1.000
+ TREND1         0.000         1.000
+ LOGV1          0.000         0.000         1.000
+ RR1            0.000         0.000         0.000         0.748
+
+
+
+     PRIORS FOR ALL PARAMETERS            PRIOR MEAN      PRIOR VARIANCE     PRIOR STD. DEV.
+
+     Parameter 1~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 2~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 3~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 4~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 5~IG(-1.000,0.000)          infinity            infinity            infinity
+     Parameter 6~IG(-1.000,0.000)          infinity            infinity            infinity
+     Parameter 7~IG(-1.000,0.000)          infinity            infinity            infinity
+     Parameter 8~IG(-1.000,0.000)          infinity            infinity            infinity
+
+
+TECHNICAL 8 OUTPUT
+
+
+   TECHNICAL 8 OUTPUT FOR BAYES ESTIMATION
+
+     CHAIN    BSEED
+     1        0
+     2        285380
+
+                     POTENTIAL       PARAMETER WITH
+     ITERATION    SCALE REDUCTION      HIGHEST PSR
+     100              1.368               3
+     200              1.129               5
+     300              1.017               2
+     400              1.111               5
+     500              1.169               5
+     600              1.012               8
+     700              1.064               5
+     800              1.029               5
+     900              1.062               5
+     1000             1.048               5
+     1100             1.068               5
+     1200             1.025               5
+     1300             1.012               3
+     1400             1.010               3
+     1500             1.014               3
+     1600             1.011               2
+     1700             1.013               2
+     1800             1.025               2
+     1900             1.021               2
+     2000             1.031               2
+     2100             1.031               2
+     2200             1.021               2
+     2300             1.014               2
+     2400             1.007               2
+     2500             1.008               1
+     2600             1.009               7
+     2700             1.010               5
+     2800             1.012               5
+     2900             1.005               5
+     3000             1.002               8
+     3100             1.003               8
+     3200             1.003               8
+     3300             1.004               8
+     3400             1.006               8
+     3500             1.006               8
+     3600             1.004               8
+     3700             1.004               5
+     3800             1.004               1
+     3900             1.007               1
+     4000             1.007               1
+     4100             1.004               1
+     4200             1.007               1
+     4300             1.006               1
+     4400             1.005               1
+     4500             1.005               3
+     4600             1.009               1
+     4700             1.014               1
+     4800             1.010               1
+     4900             1.007               1
+     5000             1.008               7
+     5100             1.013               7
+     5200             1.015               7
+     5300             1.016               7
+     5400             1.015               7
+     5500             1.013               7
+     5600             1.011               7
+     5700             1.010               7
+     5800             1.010               7
+     5900             1.011               7
+     6000             1.006               7
+     6100             1.005               7
+     6200             1.004               7
+     6300             1.002               5
+     6400             1.002               5
+     6500             1.002               3
+     6600             1.003               3
+     6700             1.003               5
+     6800             1.005               5
+     6900             1.004               5
+     7000             1.004               2
+     7100             1.005               2
+     7200             1.005               2
+     7300             1.004               2
+     7400             1.005               2
+     7500             1.007               2
+     7600             1.007               2
+     7700             1.006               2
+     7800             1.006               2
+     7900             1.005               2
+     8000             1.004               2
+     8100             1.004               2
+     8200             1.004               2
+     8300             1.004               2
+     8400             1.004               2
+     8500             1.004               2
+     8600             1.003               2
+     8700             1.004               2
+     8800             1.004               7
+     8900             1.004               7
+     9000             1.004               2
+     9100             1.004               2
+     9200             1.004               5
+     9300             1.003               5
+     9400             1.003               5
+     9500             1.002               5
+     9600             1.001               5
+     9700             1.001               2
+     9800             1.001               2
+     9900             1.001               5
+     10000            1.001               5
+     10100            1.001               5
+     10200            1.001               5
+     10300            1.001               2
+     10400            1.001               7
+     10500            1.001               7
+     10600            1.001               2
+     10700            1.001               2
+     10800            1.001               2
+     10900            1.001               2
+     11000            1.001               2
+     11100            1.001               2
+     11200            1.002               2
+     11300            1.002               2
+     11400            1.001               2
+     11500            1.001               2
+     11600            1.001               2
+     11700            1.001               2
+     11800            1.002               2
+     11900            1.002               2
+     12000            1.001               4
+     12100            1.001               4
+     12200            1.001               4
+     12300            1.001               4
+     12400            1.002               4
+     12500            1.002               2
+     12600            1.002               2
+     12700            1.003               2
+     12800            1.003               2
+     12900            1.002               4
+     13000            1.002               2
+     13100            1.002               4
+     13200            1.002               4
+     13300            1.003               4
+     13400            1.002               2
+     13500            1.003               5
+     13600            1.003               5
+     13700            1.004               5
+     13800            1.003               5
+     13900            1.002               2
+     14000            1.002               5
+     14100            1.002               5
+     14200            1.003               5
+     14300            1.003               5
+     14400            1.003               5
+     14500            1.004               5
+     14600            1.005               5
+     14700            1.005               5
+     14800            1.005               5
+     14900            1.005               5
+     15000            1.005               5
+     15100            1.006               5
+     15200            1.006               5
+     15300            1.008               5
+     15400            1.008               5
+     15500            1.008               5
+     15600            1.008               5
+     15700            1.008               5
+     15800            1.008               5
+     15900            1.008               5
+     16000            1.007               5
+     16100            1.006               5
+     16200            1.006               5
+     16300            1.005               5
+     16400            1.005               5
+     16500            1.005               5
+     16600            1.004               5
+     16700            1.003               5
+     16800            1.004               5
+     16900            1.003               5
+     17000            1.004               5
+     17100            1.004               5
+     17200            1.003               5
+     17300            1.003               5
+     17400            1.003               5
+     17500            1.004               5
+     17600            1.005               5
+     17700            1.005               5
+     17800            1.004               5
+     17900            1.002               1
+     18000            1.002               1
+     18100            1.002               1
+     18200            1.002               5
+     18300            1.002               5
+     18400            1.002               5
+     18500            1.002               5
+     18600            1.002               5
+     18700            1.002               5
+     18800            1.003               5
+     18900            1.002               5
+     19000            1.003               5
+     19100            1.003               5
+     19200            1.003               5
+     19300            1.003               1
+     19400            1.003               1
+     19500            1.003               1
+     19600            1.002               3
+     19700            1.003               7
+     19800            1.003               7
+     19900            1.003               7
+     20000            1.003               7
+
+
+SUMMARIES OF PLAUSIBLE VALUES (N = NUMBER OF OBSERVATIONS * NUMBER OF IMPUTATIONS)
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              BETA1         TREND1        LOGV1         B_RR1
+              ________      ________      ________      ________
+                0.215         0.005        -0.658         2.487
+
+
+           Covariances
+              BETA1         TREND1        LOGV1         B_RR1
+              ________      ________      ________      ________
+ BETA1          0.034
+ TREND1         0.000         0.001
+ LOGV1         -0.057        -0.001         1.514
+ B_RR1         -0.011        -0.001         0.324         0.661
+
+
+           Correlations
+              BETA1         TREND1        LOGV1         B_RR1
+              ________      ________      ________      ________
+ BETA1          1.000
+ TREND1         0.006         1.000
+ LOGV1         -0.251        -0.019         1.000
+ B_RR1         -0.072        -0.070         0.323         1.000
+
+
+SUMMARY OF PLAUSIBLE STANDARD DEVIATION (N = NUMBER OF OBSERVATIONS)
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              BETA1_SD      TREND1_S      LOGV1_SD      B_RR1_SD
+              ________      ________      ________      ________
+                0.165         0.020         0.374         0.345
+
+
+           Covariances
+              BETA1_SD      TREND1_S      LOGV1_SD      B_RR1_SD
+              ________      ________      ________      ________
+ BETA1_SD       0.001
+ TREND1_S       0.000         0.000
+ LOGV1_SD       0.001         0.001         0.037
+ B_RR1_SD       0.001         0.000         0.005         0.005
+
+
+           Correlations
+              BETA1_SD      TREND1_S      LOGV1_SD      B_RR1_SD
+              ________      ________      ________      ________
+ BETA1_SD       1.000
+ TREND1_S      -0.155         1.000
+ LOGV1_SD       0.228         0.561         1.000
+ B_RR1_SD       0.493         0.608         0.354         1.000
+
+
+PLOT INFORMATION
+
+The following plots are available:
+
+  Histograms (sample values)
+  Scatterplots (sample values)
+  Between-level histograms (sample values, sample means/variances)
+  Between-level scatterplots (sample values, sample means/variances)
+  Time series plots (sample values, ACF, PACF)
+  Histogram of subjects per time point
+  Time interval plots
+  Bayesian posterior parameter distributions
+  Bayesian posterior parameter trace plots
+  Bayesian autocorrelation plots
+
+SAVEDATA INFORMATION
+
+
+  Save file
+    rew573.dat
+
+  Order and format of variables
+
+    RR1                              F10.3
+    TIME                             F10.3
+    RR1^1                            F10.3
+    NO                               F10.3
+    _NEWTIME                         F10.3
+    _BINT                            F10.3
+    BETA1 Mean                       F10.3
+    BETA1 Median                     F10.3
+    BETA1 Standard Deviation         F10.3
+    BETA1 2.5% Value                 F10.3
+    BETA1 97.5% Value                F10.3
+    TREND1 Mean                      F10.3
+    TREND1 Median                    F10.3
+    TREND1 Standard Deviation        F10.3
+    TREND1 2.5% Value                F10.3
+    TREND1 97.5% Value               F10.3
+    LOGV1 Mean                       F10.3
+    LOGV1 Median                     F10.3
+    LOGV1 Standard Deviation         F10.3
+    LOGV1 2.5% Value                 F10.3
+    LOGV1 97.5% Value                F10.3
+    B_RR1 Mean                       F10.3
+    B_RR1 Median                     F10.3
+    B_RR1 Standard Deviation         F10.3
+    B_RR1 2.5% Value                 F10.3
+    B_RR1 97.5% Value                F10.3
+    RECORD                           I4
+
+  Save file format
+    26F10.3 I4
+
+  Save file record length    10000
+
+  Save missing symbol        *
+
+
+  Bayesian Parameters
+
+  Save file
+    rewbayes573.dat
+  Save format      Free
+
+  Order of parameters saved
+
+    Chain number
+    Iteration number
+    Parameter 1, %BETWEEN%: [ BETA1 ]
+    Parameter 2, %BETWEEN%: [ TREND1 ]
+    Parameter 3, %BETWEEN%: [ LOGV1 ]
+    Parameter 4, %BETWEEN%: [ RR1 ]
+    Parameter 5, %BETWEEN%: BETA1
+    Parameter 6, %BETWEEN%: TREND1
+    Parameter 7, %BETWEEN%: LOGV1
+    Parameter 8, %BETWEEN%: RR1
+
+    Convergence iterations 1-20000
+    Factor score imputations iterations 20001-20200
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  11:12:39
+        Ending Time:  11:13:55
+       Elapsed Time:  00:01:16
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2024 Muthen & Muthen
